@@ -406,24 +406,4 @@ references/
   ui-reference-01.png
 ```
 
-## Status / Roadmap
 
-Готово:
-
-- React/Vite SPA.
-- Supabase Auth.
-- PostgreSQL schema и RLS.
-- Личные и публичные колоды.
-- CRUD карточек.
-- CSV import/export.
-- AI-генерация и AI-объяснение через DeepSeek Edge Functions.
-- Интервальные повторения и журнал `reviews`.
-- Dashboard со статистикой.
-- PWA shell и переключение темы.
-
-Можно улучшить:
-
-- Детальный UI истории повторений по каждой карточке.
-- Persisted profile editor на таблице `profiles`, а не только локальные аватар/тема.
-- Больше аналитики по прогрессу, retention и сложным темам.
-- Полноценная документация со скриншотами в `docs/screenshots/`.
