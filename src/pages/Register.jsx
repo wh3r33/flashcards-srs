@@ -4,6 +4,7 @@ import Button from "../components/Button";
 import { register } from "../services/authService";
 import { useState } from "react";
 import { isSupabaseConfigured } from "../lib/supabaseClient";
+import { toRussianError } from "../utils/errors";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -22,15 +23,20 @@ export default function Register() {
       setTimeout(() => navigate("/dashboard"), 800);
     } catch (error) {
       setKind("danger");
-      setMessage(error.message);
+      setMessage(toRussianError(error, "Не удалось создать аккаунт. Проверьте данные и повторите попытку."));
     }
   }
 
   return (
     <Layout simple>
-      <Window title="Register.exe" extra="hero-window">
-        {!isSupabaseConfigured() && <div className="message danger">Supabase не подключён. Проверьте env-переменные.</div>}
+      <Window title="Регистрация" extra="hero-window auth-window">
+        {!isSupabaseConfigured() && <div className="message danger">Supabase не подключен. Проверьте переменные окружения.</div>}
         <form onSubmit={handleSubmit}>
+          <div className="auth-copy">
+            <div className="eyebrow">Новая картотека</div>
+            <h1 className="page-title">Создайте учебное пространство.</h1>
+            <p className="page-copy">Добавляйте колоды, импортируйте CSV и тренируйте память по расписанию.</p>
+          </div>
           <label>Почта<input name="email" type="email" required autoComplete="email" /></label>
           <label>Пароль<input name="password" type="password" minLength="6" required autoComplete="new-password" /></label>
           <Button type="submit">Зарегистрироваться</Button>

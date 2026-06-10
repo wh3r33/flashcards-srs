@@ -29,7 +29,7 @@ export default function AvatarUploader({ user }) {
   function removeAvatar() {
     localStorage.removeItem(avatarKey);
     setAvatar("");
-    setMessage("Аватар удален.");
+      setMessage("Аватар удален.");
   }
 
   return (
@@ -38,7 +38,7 @@ export default function AvatarUploader({ user }) {
         {avatar ? <img src={avatar} alt="Аватар пользователя" /> : user.email.slice(0, 1).toUpperCase()}
       </div>
       <div>
-        <div className="eyebrow">Avatar</div>
+        <div className="eyebrow">Аватар</div>
         <h2>{user.email.split("@")[0]}</h2>
         <p className="muted">{user.email}</p>
       </div>

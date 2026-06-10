@@ -1,11 +1,11 @@
 {
-  "name": "StudyOS.exe",
-  "short_name": "StudyOS",
+  "name": "Картотека памяти",
+  "short_name": "Картотека",
   "description": "Карточки и интервальные повторения в стиле учебного журнала.",
   "start_url": "/dashboard",
   "display": "standalone",
-  "background_color": "#f8f1df",
-  "theme_color": "#15130f",
+  "background_color": "#f6efe0",
+  "theme_color": "#17130f",
   "icons": [
     {
       "src": "/assets/icons/icon-192.svg",

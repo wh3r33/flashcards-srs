@@ -5,6 +5,7 @@ import AvatarUploader from "../components/AvatarUploader";
 import LoadingState from "../components/LoadingState";
 import { useAuth } from "../App";
 import { dashboardStats } from "../services/reviewService";
+import { toRussianError } from "../utils/errors";
 
 export default function Profile() {
   const { user } = useAuth();
@@ -12,7 +13,7 @@ export default function Profile() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    dashboardStats().then(setStats).catch((err) => setError(err.message));
+    dashboardStats().then(setStats).catch((err) => setError(toRussianError(err, "Не удалось загрузить профиль обучения.")));
   }, []);
 
   function toggleTheme() {
@@ -22,19 +23,19 @@ export default function Profile() {
   }
 
   return (
-    <Layout title="Study Workspace" activeTitle="profile">
+    <Layout title="Профиль обучения" activeTitle="Профиль">
       <div className="profile-hero">
         <div>
-          <div className="eyebrow">Learning identity</div>
-          <h1 className="page-title">Your desk inside the second brain.</h1>
+          <div className="eyebrow">Учебный профиль</div>
+          <h1 className="page-title">Ваш стол внутри картотеки.</h1>
           <p className="page-copy">Аватар, серия, достижения и рост знаний собраны как персональное учебное пространство.</p>
         </div>
       </div>
       <div className="profile-grid">
         <AvatarUploader user={user} />
         <section className="panel">
-          <div className="eyebrow">Learning signature</div>
-          <h2>Collector profile</h2>
+          <div className="eyebrow">Учебный след</div>
+          <h2>Профиль коллекции</h2>
           <div className="profile-stats">
             {error && <div className="message danger">{error}</div>}
             {!stats && !error && <LoadingState>Загружаю статистику...</LoadingState>}
@@ -49,10 +50,10 @@ export default function Profile() {
           </div>
           <hr />
           <div className="achievement-list">
-            <div className="achievement"><strong>Daily rhythm</strong><span className="muted">Повторы за неделю</span></div>
-            <div className="achievement"><strong>Archive builder</strong><span className="muted">Колоды и карточки</span></div>
-            <div className="achievement"><strong>Recall quality</strong><span className="muted">Точность ответов</span></div>
-            <div className="achievement"><strong>Knowledge growth</strong><span className="muted">Выученные карточки</span></div>
+            <div className="achievement"><strong>Ежедневный ритм</strong><span className="muted">Повторы за неделю</span></div>
+            <div className="achievement"><strong>Строитель архива</strong><span className="muted">Колоды и карточки</span></div>
+            <div className="achievement"><strong>Качество вспоминания</strong><span className="muted">Точность ответов</span></div>
+            <div className="achievement"><strong>Рост знаний</strong><span className="muted">Выученные карточки</span></div>
           </div>
           <hr />
           <div className="toolbar"><Button type="button" onClick={toggleTheme}>Переключить тему</Button></div>

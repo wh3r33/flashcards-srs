@@ -1,11 +1,11 @@
 import { logout } from "./auth.js";
 
 const navItems = [
-  ["dashboard.html", "Journal"],
-  ["decks.html", "Notebooks"],
-  ["training.html", "Recall"],
-  ["public.html", "Archive"],
-  ["profile.html", "Desk"]
+  ["dashboard.html", "Обзор"],
+  ["decks.html", "Колоды"],
+  ["training.html", "Повторение"],
+  ["public.html", "Каталог"],
+  ["profile.html", "Профиль"]
 ];
 
 const titleIcons = {
@@ -46,19 +46,19 @@ export function appShell(title, body, active) {
   return `
     <main class="desktop">
       <div class="shell">
-        ${windowHtml("Library Index", `
-          <div class="start-brand"><span class="start-logo"></span><span>Second Brain Studio</span></div>
+        ${windowHtml("Навигация", `
+          <div class="start-brand"><span class="start-logo"></span><span>Картотека памяти</span></div>
           <nav class="nav">
-            <a class="win-button" href="/dashboard.html">Home base</a>
+            <a class="win-button" href="/dashboard.html">Главная</a>
             ${nav}
-            <button id="themeToggle" type="button">Switch light</button>
-            <button id="logoutButton" type="button">Sign out</button>
+            <button id="themeToggle" type="button">Сменить тему</button>
+            <button id="logoutButton" type="button">Выйти</button>
           </nav>
         `, "nav-window")}
         ${windowHtml(title, body)}
       </div>
       <div class="start-bar">
-        <a class="win-button" href="/dashboard.html">Journal</a>
+        <a class="win-button" href="/dashboard.html">Обзор</a>
         <div class="task-buttons"><div class="win-button task-button is-active">${title}</div></div>
         <div class="clock" id="clock"></div>
       </div>

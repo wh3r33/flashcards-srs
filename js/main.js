@@ -6,7 +6,7 @@ import { createCard, createCards, deleteCard, listCards, updateCard, dueCards } 
 import { dashboardStats, reviewCard } from "./reviews.js";
 import { exportCardsCsv, parseCsv } from "./csv.js";
 import { explainCard, generateCards } from "./ai.js";
-import { renderReviewsChart } from "./charts.js";
+import { renderПроверкаsChart } from "./charts.js";
 import { $, $$, escapeHtml, formDataObject, getParam, requireConfigNotice, setMessage, splitTags, tagsToText } from "./utils.js";
 
 applyTheme();
@@ -36,13 +36,13 @@ function authNotice() {
 function renderLanding() {
   app.innerHTML = `
     <main class="desktop single-window">
-      ${windowHtml("Second Brain Studio", `
+      ${windowHtml("Картотека памяти", `
         ${authNotice()}
         <div class="hero-layout">
           <div>
-            <div class="eyebrow">Personal knowledge collection</div>
-            <h1 class="hero-title">Build your living library.</h1>
-            <p class="hero-copy">Карточки, заметки, повторения и AI-подготовка складываются в личный учебный журнал, а не в очередной рабочий dashboard.</p>
+            <div class="eyebrow">Личная система знаний</div>
+            <h1 class="hero-title">Соберите живую библиотеку.</h1>
+            <p class="hero-copy">Карточки, заметки, повторения и ИИ-подготовка складываются в личный учебный журнал.</p>
             <div class="row">
               <a class="win-button" href="/register.html">Создать аккаунт</a>
               <a class="win-button" href="/login.html">Войти</a>
@@ -50,16 +50,16 @@ function renderLanding() {
             </div>
           </div>
           <div class="desktop-preview" aria-label="Коллаж учебного журнала">
-            <div class="scrap scrap-book">Knowledge<br>Library</div>
-            <div class="scrap scrap-card">Recall<br>Cards</div>
-            <div class="scrap scrap-note">AI Study<br>Notes</div>
+            <div class="scrap scrap-book">Библиотека<br>знаний</div>
+            <div class="scrap scrap-card">Карточки<br>памяти</div>
+            <div class="scrap scrap-note">ИИ<br>конспект</div>
             <div class="window mini-window">
-              <div class="title-bar"><span class="title-left"><span class="program-icon">M</span><span>Memory rhythm</span></span><span class="window-controls" aria-hidden="true"><b></b><b></b><b></b></span></div>
+              <div class="title-bar"><span class="title-left"><span class="program-icon">Р</span><span>Ритм памяти</span></span><span class="window-controls" aria-hidden="true"><b></b><b></b><b></b></span></div>
               <div class="window-body"><div class="chart"><div class="bar" style="height:35px">2</div><div class="bar" style="height:80px">6</div><div class="bar" style="height:55px">4</div><div class="bar" style="height:120px">9</div><div class="bar" style="height:65px">5</div><div class="bar" style="height:95px">7</div><div class="bar" style="height:40px">3</div></div></div>
             </div>
           </div>
         </div>
-        <div class="status-bar"><span>Ready for collection</span><span>Designed as a second brain</span></div>
+        <div class="status-bar"><span>Готово к учебе</span><span>Карточки, колоды и интервальные повторения</span></div>
       `, "hero-window")}
     </main>
   `;
@@ -120,11 +120,11 @@ async function renderLogin() {
 
 async function renderDashboard() {
   await requireAuth();
-  app.innerHTML = appShell("My Knowledge Journal", `
+  app.innerHTML = appShell("Журнал памяти", `
     <div class="dashboard-hero">
       <div>
-        <div class="eyebrow">Today in the archive</div>
-        <h1 class="page-title">Your memory is becoming a collection.</h1>
+        <div class="eyebrow">Сегодня в архиве</div>
+        <h1 class="page-title">Память становится системой.</h1>
         <p class="page-copy">Повторы, точность и рост встроены в страницу как заметки на развороте учебного журнала.</p>
       </div>
       <div class="row">
@@ -137,8 +137,8 @@ async function renderDashboard() {
     <div class="dashboard-grid journal-grid">
       <div class="journal-metrics" id="stats"></div>
       <div class="panel chart-panel">
-        <div class="eyebrow">Review rhythm</div>
-        <h2>Seven-day memory trail</h2>
+        <div class="eyebrow">Ритм повторений</div>
+        <h2>Последние семь дней</h2>
         <p class="muted">Ритм повторений важнее разовых рывков. Каждая отметка здесь похожа на закладку в личной библиотеке.</p>
         <div class="chart" id="chart"></div>
       </div>
@@ -149,13 +149,13 @@ async function renderDashboard() {
     const stats = await dashboardStats();
     $("#message").remove();
     $("#stats").innerHTML = [
-      ["К сроку сегодня", stats.dueToday, "featured stat-due", "bookmark-red", "Ready slips", "Тихий фокус на ближайшем повторении."],
-      ["Точность", `${stats.accuracy}%`, "stat-accuracy", "bookmark-green", "Recall quality", "Доля уверенных ответов в журнале."],
-      ["Неделя", `${stats.reviewedWeek}`, "stat-week", "bookmark-blue", "Seven-day trail", "Повторы за последние семь дней."],
-      ["Выучено", stats.learned, "stat-learned", "bookmark-gold", "Long-term shelf", "Карточки, закрепленные в памяти."],
-      ["Карточек", stats.totalCards, "stat-cards", "bookmark-red", "Archive volume", "Все учебные записи в системе."],
-      ["Колоды", stats.totalDecks, "stat-decks", "bookmark-green", "Notebooks", "Отдельные коллекции знаний."],
-      ["Повторов", stats.totalReviews, "stat-reviews", "bookmark-blue", "Total marks", "История сделанных повторений."]
+      ["К сроку сегодня", stats.dueToday, "featured stat-due", "bookmark-red", "Повторить сейчас", "Тихий фокус на ближайшем повторении."],
+      ["Точность", `${stats.accuracy}%`, "stat-accuracy", "bookmark-green", "Качество ответов", "Доля уверенных ответов в журнале."],
+      ["Неделя", `${stats.reviewedWeek}`, "stat-week", "bookmark-blue", "Ритм за неделю", "Повторы за последние семь дней."],
+      ["Выучено", stats.learned, "stat-learned", "bookmark-gold", "Долгая память", "Карточки, закрепленные в памяти."],
+      ["Карточек", stats.totalCards, "stat-cards", "bookmark-red", "Объем архива", "Все учебные записи в системе."],
+      ["Колоды", stats.totalDecks, "stat-decks", "bookmark-green", "Блокноты", "Отдельные коллекции знаний."],
+      ["Повторов", stats.totalПроверкаs, "stat-reviews", "bookmark-blue", "История", "История сделанных повторений."]
     ].map(([label, value, variant, tone, kicker, caption]) => `
       <article class="panel stat-panel ${variant} ${tone}">
         <div class="stat-head"><span>${label}</span><span>${kicker}</span></div>
@@ -166,7 +166,7 @@ async function renderDashboard() {
         <p class="muted">${caption}</p>
         <div class="meter" aria-hidden="true"></div>
       </article>`).join("");
-    renderReviewsChart($("#chart"), stats.recentReviews);
+    renderПроверкаsChart($("#chart"), stats.recentПроверкаs);
   } catch (error) {
     setMessage($("#message"), error.message, "danger");
   }
@@ -186,18 +186,18 @@ function deckForm(deck = {}) {
 
 async function renderDecks() {
   const session = await requireAuth();
-  app.innerHTML = appShell("Notebook Library", `
+  app.innerHTML = appShell("Библиотека колод", `
     <div class="deck-hero">
       <div>
-        <div class="eyebrow">Personal archive</div>
-        <h1 class="page-title">Decks should feel worth opening.</h1>
+        <div class="eyebrow">Личный архив</div>
+        <h1 class="page-title">Колоды должны быть понятны с первого взгляда.</h1>
         <p class="page-copy">Каждая колода оформлена как отдельный учебный блокнот: с ярлыком, закладкой и собственной ролью в системе знаний.</p>
       </div>
     </div>
     <div class="explorer-layout">
       <div class="panel tree-panel">
-        <div class="eyebrow">New notebook</div>
-        <h2>Start a collection</h2>
+        <div class="eyebrow">Новая колода</div>
+        <h2>Начать коллекцию</h2>
         <p class="muted">Назовите тему так, будто ставите новый блокнот на полку личной библиотеки.</p>
         <hr>
         ${deckForm()}
@@ -217,17 +217,17 @@ async function renderDecks() {
     $("#deckList").innerHTML = decks.length ? decks.map((deck) => `
       <li class="list-item folder-item notebook-item">
         <div class="folder-icon"></div>
-        <header><strong>${escapeHtml(deck.name)}</strong><span class="badge">${deck.is_public ? "Public" : "Private"}</span></header>
+        <header><strong>${escapeHtml(deck.name)}</strong><span class="badge">${deck.is_public ? "Публичная" : "Личная"}</span></header>
         <p>${escapeHtml(deck.description || "Без описания")}</p>
         <div class="row">
           <a class="win-button" href="/deck.html?id=${deck.id}">Открыть</a>
           <button class="win-button" data-edit="${deck.id}">Править</button>
           <button class="win-button" data-delete="${deck.id}">Удалить</button>
         </div>
-      </li>`).join("") : `<li class="empty-state"><div><div class="eyebrow">Empty library</div><h2>Коллекций пока нет</h2><p class="muted">Создайте первую колоду слева и превратите заметки в систему повторения.</p></div></li>`;
+      </li>`).join("") : `<li class="empty-state"><div><div class="eyebrow">Пустая библиотека</div><h2>Коллекций пока нет</h2><p class="muted">Создайте первую колоду слева и превратите заметки в систему повторения.</p></div></li>`;
     $$("[data-edit]").forEach((button) => button.addEventListener("click", async () => {
       const deck = await getDeck(button.dataset.edit);
-      $(".tree-panel").innerHTML = `<div class="eyebrow">Edit notebook</div><h2>${escapeHtml(deck.name)}</h2><p class="muted">Обновите публичность, название или описание.</p><hr>` + deckForm(deck) + `<div id="formMessage" class="message hidden"></div>`;
+      $(".tree-panel").innerHTML = `<div class="eyebrow">Редактирование</div><h2>${escapeHtml(deck.name)}</h2><p class="muted">Обновите публичность, название или описание.</p><hr>` + deckForm(deck) + `<div id="formMessage" class="message hidden"></div>`;
       bindDeckForm(load, session.user.id);
     }));
     $$("[data-delete]").forEach((button) => button.addEventListener("click", async () => {
@@ -282,10 +282,10 @@ async function renderDeckDetail() {
   const deckId = getParam("id");
   const deck = await getDeck(deckId);
   const canEdit = session && session.user.id === deck.user_id;
-  app.innerHTML = appShell("Deck Notebook", `
+  app.innerHTML = appShell("Блокнот колоды", `
     <div class="deck-hero">
       <div>
-        <div class="eyebrow">${canEdit ? "Editable notebook" : "Public preview"}</div>
+        <div class="eyebrow">${canEdit ? "Можно редактировать" : "Публичная колода"}</div>
         <h1 class="page-title">${escapeHtml(deck.name)}</h1>
         <p class="page-copy">${escapeHtml(deck.description || "Без описания")}</p>
       </div>
@@ -297,13 +297,13 @@ async function renderDeckDetail() {
       </div>
     </div>
     <div class="split">
-      ${canEdit ? `<div class="panel"><div class="eyebrow">New card</div><h2>Add a study slip</h2>${cardForm()}<div id="cardMessage" class="message hidden"></div></div>` : `<div class="panel"><div class="eyebrow">Read only</div><h2>Public preview</h2><p class="muted">Чтобы редактировать, скопируйте колоду себе из каталога.</p></div>`}
+      ${canEdit ? `<div class="panel"><div class="eyebrow">Новая карточка</div><h2>Добавить учебную карточку</h2>${cardForm()}<div id="cardMessage" class="message hidden"></div></div>` : `<div class="panel"><div class="eyebrow">Только просмотр</div><h2>Публичная колода</h2><p class="muted">Чтобы редактировать, скопируйте колоду себе из каталога.</p></div>`}
       <div>
         <div class="toolbar"><input id="categoryFilter" placeholder="Категория"><input id="tagFilter" placeholder="Тег"><button class="win-button" id="filterButton">Фильтр</button></div>
         <ul class="list card-list system-list" id="cardList"><li class="message">Загружаю карточки...</li></ul>
       </div>
     </div>
-    <div class="status-bar"><span>${canEdit ? "Editable" : "Read only"}</span><span id="cardCountStatus">0 cards</span></div>
+    <div class="status-bar"><span>${canEdit ? "Редактирование доступно" : "Только просмотр"}</span><span id="cardCountStatus">Карточки: 0</span></div>
     <div id="modalRoot"></div>
   `, "decks.html");
   bindShell();
@@ -317,7 +317,7 @@ async function renderDeckDetail() {
         <p>${escapeHtml(card.back)}</p>
         <p class="muted">${escapeHtml(card.category || "Без категории")} ${escapeHtml(tagsToText(card.tags))}</p>
         ${canEdit ? `<div class="row"><button class="win-button" data-card-edit="${card.id}">Править</button><button class="win-button" data-card-delete="${card.id}">Удалить</button></div>` : ""}
-      </li>`).join("") : `<li class="empty-state"><div><div class="eyebrow">No cards</div><h2>Карточек пока нет</h2><p class="muted">Добавьте первую карточку или импортируйте CSV, чтобы собрать тренировочный набор.</p></div></li>`;
+      </li>`).join("") : `<li class="empty-state"><div><div class="eyebrow">Нет карточек</div><h2>Карточек пока нет</h2><p class="muted">Добавьте первую карточку или импортируйте CSV, чтобы собрать тренировочный набор.</p></div></li>`;
     if (canEdit) {
       $$("[data-card-edit]").forEach((button) => button.addEventListener("click", () => {
         const card = currentCards.find((item) => item.id === button.dataset.cardEdit);
@@ -376,9 +376,9 @@ function openAiModal(deckId, load) {
   $("#modalRoot").innerHTML = `
     <div class="modal-backdrop">
       <section class="window modal">
-        <div class="title-bar"><span class="title-left"><span class="program-icon">A</span><span>AI study notes</span></span><span class="window-controls" aria-hidden="true"><b></b><b></b><b></b></span></div>
+        <div class="title-bar"><span class="title-left"><span class="program-icon">A</span><span>ИИ-подготовка карточек</span></span><span class="window-controls" aria-hidden="true"><b></b><b></b><b></b></span></div>
         <div class="window-body">
-          <div class="menu-bar"><span class="menu-item">Source text</span><span class="menu-item">Generate</span><span class="menu-item">Review</span></div>
+          <div class="menu-bar"><span class="menu-item">Исходный текст</span><span class="menu-item">Генерация</span><span class="menu-item">Проверка</span></div>
           <form id="aiForm">
             <label>Текст для карточек<textarea class="notepad" name="text" required></textarea></label>
             <label>Количество<select name="amount"><option>5</option><option>10</option><option>20</option></select></label>
@@ -386,7 +386,7 @@ function openAiModal(deckId, load) {
           </form>
           <div id="aiMessage" class="message hidden"></div>
           <form id="aiPreview" class="list system-list"></form>
-          <div class="row"><button class="win-button" id="saveGenerated" type="button">Сохранить выбранные</button><button class="win-button" id="closeAi" type="button">Закрыть</button></div>
+          <div class="row"><button class="win-button" id="saveГенерацияd" type="button">Сохранить выбранные</button><button class="win-button" id="closeAi" type="button">Закрыть</button></div>
         </div>
       </section>
     </div>`;
@@ -408,7 +408,7 @@ function openAiModal(deckId, load) {
       setMessage($("#aiMessage"), `ИИ не смог сгенерировать карточки: ${error.message}`, "danger");
     }
   });
-  $("#saveGenerated").addEventListener("click", async () => {
+  $("#saveГенерацияd").addEventListener("click", async () => {
     const picked = $$("input[name='pick']:checked").map((input) => generated[Number(input.value)]);
     await createCards(picked.map((card) => ({
       deck_id: deckId,
@@ -428,11 +428,11 @@ function openAiModal(deckId, load) {
 
 async function renderTraining() {
   await requireAuth();
-  app.innerHTML = appShell("Recall Studio", `
+  app.innerHTML = appShell("Тренировка", `
     <div class="training-intro">
       <div>
-        <div class="eyebrow">Immersive recall</div>
-        <h1 class="page-title">One beautiful study card at a time.</h1>
+        <div class="eyebrow">Интервальное повторение</div>
+        <h1 class="page-title">Одна карточка за раз.</h1>
         <p class="page-copy">Вопрос, раскрытие ответа и оценка памяти выстроены как спокойный учебный ритуал без лишних отвлечений.</p>
       </div>
     </div>
@@ -454,7 +454,7 @@ async function renderTraining() {
         <button class="win-button hidden" id="nextAfterExplain">Следующая карточка</button>
       </div>
     </div>
-    <div class="status-bar"><span>Spaced repetition active</span><span>Designed for recall, not browsing</span></div>
+    <div class="status-bar"><span>Интервальные повторения включены</span><span>Оценка ответа обновит расписание карточки</span></div>
   `, "training.html");
   bindShell();
   const cards = await dueCards(getParam("deck"));
@@ -512,11 +512,11 @@ async function renderTraining() {
 
 async function renderProfile() {
   const session = await requireAuth();
-  app.innerHTML = appShell("Study Workspace", `
+  app.innerHTML = appShell("Профиль обучения", `
     <div class="profile-hero">
       <div>
-        <div class="eyebrow">Learning identity</div>
-        <h1 class="page-title">Your desk inside the second brain.</h1>
+        <div class="eyebrow">Учебный профиль</div>
+        <h1 class="page-title">Ваш стол внутри картотеки.</h1>
         <p class="page-copy">Аватар, серия, достижения и рост знаний собраны как персональное учебное пространство.</p>
       </div>
     </div>
@@ -524,26 +524,26 @@ async function renderProfile() {
       <section class="panel avatar-card">
         <div class="avatar-preview" id="avatarPreview"></div>
         <div>
-          <div class="eyebrow">Avatar</div>
+          <div class="eyebrow">Аватар</div>
           <h2>${escapeHtml(session.user.email.split("@")[0])}</h2>
           <p class="muted">${escapeHtml(session.user.email)}</p>
         </div>
         <div class="row avatar-actions">
           <label class="win-button">Загрузить<input id="avatarInput" type="file" accept="image/*" class="hidden"></label>
-          <button class="win-button" id="removeAvatar" type="button">Удалить</button>
+          <button class="win-button" id="removeАватар" type="button">Удалить</button>
         </div>
         <div id="avatarMessage" class="message hidden"></div>
       </section>
       <section class="panel">
-        <div class="eyebrow">Learning signature</div>
-        <h2>Collector profile</h2>
+        <div class="eyebrow">Учебный след</div>
+        <h2>Профиль коллекции</h2>
         <div id="profileStats" class="profile-stats"><div class="message">Загружаю статистику...</div></div>
         <hr>
         <div class="achievement-list">
-          <div class="achievement"><strong>Daily rhythm</strong><span class="muted">Повторы за неделю</span></div>
-          <div class="achievement"><strong>Archive builder</strong><span class="muted">Колоды и карточки</span></div>
-          <div class="achievement"><strong>Recall quality</strong><span class="muted">Точность ответов</span></div>
-          <div class="achievement"><strong>Knowledge growth</strong><span class="muted">Выученные карточки</span></div>
+          <div class="achievement"><strong>Ежедневный ритм</strong><span class="muted">Повторы за неделю</span></div>
+          <div class="achievement"><strong>Строитель архива</strong><span class="muted">Колоды и карточки</span></div>
+          <div class="achievement"><strong>Качество вспоминания</strong><span class="muted">Точность ответов</span></div>
+          <div class="achievement"><strong>Рост знаний</strong><span class="muted">Выученные карточки</span></div>
         </div>
         <hr>
         <div class="toolbar"><button class="win-button" id="themeToggleLocal">Переключить тему</button></div>
@@ -553,12 +553,12 @@ async function renderProfile() {
   `, "profile.html");
   bindShell();
   const avatarKey = `studyos-avatar:${session.user.id}`;
-  const renderAvatar = () => {
+  const renderАватар = () => {
     const avatar = localStorage.getItem(avatarKey);
     const fallback = escapeHtml(session.user.email.slice(0, 1).toUpperCase());
     $("#avatarPreview").innerHTML = avatar ? `<img src="${avatar}" alt="Аватар пользователя">` : fallback;
   };
-  renderAvatar();
+  renderАватар();
   $("#avatarInput").addEventListener("change", async (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -569,14 +569,14 @@ async function renderProfile() {
     const reader = new FileReader();
     reader.addEventListener("load", () => {
       localStorage.setItem(avatarKey, reader.result);
-      renderAvatar();
+      renderАватар();
       setMessage($("#avatarMessage"), "Аватар обновлен.", "success");
     });
     reader.readAsDataURL(file);
   });
-  $("#removeAvatar").addEventListener("click", () => {
+  $("#removeАватар").addEventListener("click", () => {
     localStorage.removeItem(avatarKey);
-    renderAvatar();
+    renderАватар();
     setMessage($("#avatarMessage"), "Аватар удален.", "success");
   });
   $("#themeToggleLocal").addEventListener("click", () => $("#themeToggle").click());
@@ -586,7 +586,7 @@ async function renderProfile() {
       ["Точность", `${stats.accuracy}%`, "annotation-red"],
       ["Карточек", stats.totalCards, "annotation-blue"],
       ["Выучено", stats.learned, "annotation-green"],
-      ["Повторов", stats.totalReviews, "annotation-gold"],
+      ["Повторов", stats.totalПроверкаs, "annotation-gold"],
       ["Колоды", stats.totalDecks, "annotation-red"],
       ["Неделя", stats.reviewedWeek, "annotation-blue"]
     ].map(([label, value, tone]) => `<div class="profile-note ${tone}"><span>${label}</span><strong>${value}</strong></div>`).join("");
@@ -597,19 +597,19 @@ async function renderProfile() {
 
 async function renderPublic() {
   const session = await getSession();
-  app.innerHTML = appShell("Shared Archive", `
+  app.innerHTML = appShell("Публичный каталог", `
     <div class="deck-hero">
       <div>
-        <div class="eyebrow">Shared knowledge</div>
-        <h1 class="page-title">Collect notebooks from other minds.</h1>
+        <div class="eyebrow">Общие материалы</div>
+        <h1 class="page-title">Забирайте полезные колоды себе.</h1>
         <p class="page-copy">Просматривайте публичные колоды и копируйте полезные коллекции в свое пространство.</p>
       </div>
     </div>
     ${authNotice()}
     <div class="explorer-layout">
       <div class="panel tree-panel">
-        <div class="eyebrow">Curated shelf</div>
-        <h2>Browse and collect</h2>
+        <div class="eyebrow">Открытая полка</div>
+        <h2>Найдите готовый набор</h2>
         <p class="muted">Публичные материалы представлены как выставка учебных блокнотов.</p>
       </div>
       <div>
@@ -617,7 +617,7 @@ async function renderPublic() {
         <ul class="list folder-list" id="publicList"><li class="message">Загружаю каталог...</li></ul>
       </div>
     </div>
-    <div class="status-bar"><span>${session ? "Copy enabled" : "Login required to copy"}</span><span id="publicCountStatus">0 shared collections</span></div>
+    <div class="status-bar"><span>${session ? "Копирование доступно" : "Войдите, чтобы копировать колоды"}</span><span id="publicCountStatus">Публичные колоды: 0</span></div>
   `, "public.html");
   bindShell();
   const load = async () => {
@@ -627,13 +627,13 @@ async function renderPublic() {
       $("#publicList").innerHTML = decks.length ? decks.map((deck) => `
         <li class="list-item folder-item notebook-item">
           <div class="folder-icon"></div>
-          <header><strong>${escapeHtml(deck.name)}</strong><span class="badge">Public</span></header>
+          <header><strong>${escapeHtml(deck.name)}</strong><span class="badge">Публичная</span></header>
           <p>${escapeHtml(deck.description || "Без описания")}</p>
           <div class="row">
             <a class="win-button" href="/deck.html?id=${deck.id}">Просмотр</a>
             <button class="win-button" data-copy="${deck.id}" ${session ? "" : "disabled"}>Скопировать</button>
           </div>
-        </li>`).join("") : `<li class="empty-state"><div><div class="eyebrow">No public decks</div><h2>Каталог пуст</h2><p class="muted">Когда пользователи откроют доступ к колодам, они появятся здесь.</p></div></li>`;
+        </li>`).join("") : `<li class="empty-state"><div><div class="eyebrow">Нет публичных колод</div><h2>Каталог пуст</h2><p class="muted">Когда пользователи откроют доступ к колодам, они появятся здесь.</p></div></li>`;
       $$("[data-copy]").forEach((button) => button.addEventListener("click", async () => {
         const copied = await copyPublicDeck(button.dataset.copy, session.user.id);
         location.href = `/deck.html?id=${copied.id}`;

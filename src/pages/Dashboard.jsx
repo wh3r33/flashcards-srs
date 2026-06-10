@@ -5,6 +5,7 @@ import Button from "../components/Button";
 import StatCard from "../components/StatCard";
 import LoadingState from "../components/LoadingState";
 import { dashboardStats } from "../services/reviewService";
+import { toRussianError } from "../utils/errors";
 
 function ReviewsChart({ reviews }) {
   const days = [...Array(7)].map((_, index) => {
@@ -26,7 +27,7 @@ function ReviewsChart({ reviews }) {
   const average = Math.round((total / days.length) * 10) / 10;
   return (
     <>
-      <div className="chart-summary"><span>7-day total</span><strong>{total}</strong><small>{average} / day</small></div>
+      <div className="chart-summary"><span>Итого за 7 дней</span><strong>{total}</strong><small>{average} в день</small></div>
       <div className="chart-bars" role="list" aria-label="Повторы за последние семь дней">
         {days.map((day) => (
           <div className="chart-day" role="listitem" title={`${day.label}: ${day.count}`} key={day.key}>
@@ -45,26 +46,26 @@ export default function Dashboard() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    dashboardStats().then(setStats).catch((err) => setError(err.message));
+    dashboardStats().then(setStats).catch((err) => setError(toRussianError(err, "Не удалось загрузить статистику.")));
   }, []);
 
   const statCards = stats && [
-    ["К сроку сегодня", stats.dueToday, "featured stat-due", "bookmark-red", "Ready slips", "Тихий фокус на ближайшем повторении."],
-    ["Точность", `${stats.accuracy}%`, "stat-accuracy", "bookmark-green", "Recall quality", "Доля уверенных ответов в журнале."],
-    ["Неделя", `${stats.reviewedWeek}`, "stat-week", "bookmark-blue", "Seven-day trail", "Повторы за последние семь дней."],
-    ["Выучено", stats.learned, "stat-learned", "bookmark-gold", "Long-term shelf", "Карточки, закрепленные в памяти."],
-    ["Карточек", stats.totalCards, "stat-cards", "bookmark-red", "Archive volume", "Все учебные записи в системе."],
-    ["Колоды", stats.totalDecks, "stat-decks", "bookmark-green", "Notebooks", "Отдельные коллекции знаний."],
-    ["Повторов", stats.totalReviews, "stat-reviews", "bookmark-blue", "Total marks", "История сделанных повторений."]
+    ["К сроку сегодня", stats.dueToday, "featured stat-due", "bookmark-red", "Повторить сейчас", "Ближайшие карточки для тренировки."],
+    ["Точность", `${stats.accuracy}%`, "stat-accuracy", "bookmark-green", "Качество ответов", "Доля уверенных ответов в журнале."],
+    ["Неделя", `${stats.reviewedWeek}`, "stat-week", "bookmark-blue", "Ритм за неделю", "Повторы за последние семь дней."],
+    ["Выучено", stats.learned, "stat-learned", "bookmark-gold", "Долгая память", "Карточки, закрепленные в памяти."],
+    ["Карточек", stats.totalCards, "stat-cards", "bookmark-red", "Объем архива", "Все учебные записи в системе."],
+    ["Колоды", stats.totalDecks, "stat-decks", "bookmark-green", "Блокноты", "Отдельные коллекции знаний."],
+    ["Повторов", stats.totalReviews, "stat-reviews", "bookmark-blue", "История", "Все сделанные повторения."]
   ];
 
   return (
-    <Layout title="My Knowledge Journal" activeTitle="dashboard">
+    <Layout title="Журнал памяти" activeTitle="Обзор">
       <div className="dashboard-hero">
         <div>
-          <div className="eyebrow">Today in the archive</div>
-          <h1 className="page-title">Your memory is becoming a collection.</h1>
-          <p className="page-copy">Повторы, точность и рост встроены в страницу как заметки на развороте учебного журнала.</p>
+          <div className="eyebrow">Сегодня в архиве</div>
+          <h1 className="page-title">Память становится системой.</h1>
+          <p className="page-copy">Здесь видно, что повторить сегодня, как меняется точность и сколько знаний уже закреплено.</p>
         </div>
         <div className="row">
           <Button as={Link} to="/training/all">Начать тренировку</Button>
@@ -81,9 +82,9 @@ export default function Dashboard() {
             ))}
           </div>
           <div className="panel chart-panel">
-            <div className="eyebrow">Review rhythm</div>
-            <h2>Seven-day memory trail</h2>
-            <p className="muted">Ритм повторений важнее разовых рывков. Каждая отметка здесь похожа на закладку в личной библиотеке.</p>
+            <div className="eyebrow">Ритм повторений</div>
+            <h2>Последние семь дней</h2>
+            <p className="muted">Регулярность важнее рывков. График показывает, когда вы действительно возвращались к карточкам.</p>
             <div className="chart"><ReviewsChart reviews={stats.recentReviews} /></div>
           </div>
         </div>

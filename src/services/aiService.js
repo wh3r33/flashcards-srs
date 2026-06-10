@@ -6,19 +6,14 @@ export async function generateCardsFromText(text, amount) {
     amount: Number(amount)
   };
 
-  console.log("generate-cards outgoing body:", body);
-
   const { data, error } = await supabase.functions.invoke("generate-cards", {
     body
   });
 
   const functionError = error ? await readFunctionError(error) : "";
 
-  console.log("generate-cards returned data:", data);
-  console.log("generate-cards returned error:", functionError || error);
-
   if (error) {
-    throw new Error(functionError || data?.error || error.message || "Ошибка Edge Function");
+    throw new Error(functionError || data?.error || error.message || "Ошибка серверной функции");
   }
 
   if (data?.error) {

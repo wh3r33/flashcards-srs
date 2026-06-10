@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
-const CONFIG_ERROR_MESSAGE = "Supabase не подключён. Проверьте переменные VITE_SUPABASE_URL и VITE_SUPABASE_ANON_KEY";
+const CONFIG_ERROR_MESSAGE = "Supabase не подключен. Проверьте переменные окружения VITE_SUPABASE_URL и VITE_SUPABASE_ANON_KEY.";
 const PLACEHOLDER_PATTERN = /your_project|your[-_]?supabase|your_/i;
 
 const legacyConfig = globalThis.STUDYOS_LEGACY_CONFIG || {};

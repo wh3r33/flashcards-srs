@@ -1,4 +1,4 @@
-export default function EmptyState({ eyebrow = "Empty", title, children }) {
+export default function EmptyState({ eyebrow = "Пусто", title, children }) {
   return (
     <div className="empty-state">
       <div>

@@ -11,6 +11,7 @@ import { getDeck } from "../services/deckService";
 import { createCard, createCards, deleteCard, listCards, updateCard } from "../services/cardService";
 import { generateCardsFromText } from "../services/aiService";
 import { exportCardsCsv, parseCsv, splitTags, tagsToText } from "../utils/csv";
+import { toRussianError } from "../utils/errors";
 
 const CARD_TYPES = [
   ["basic", "Вопрос и ответ"],
@@ -45,14 +46,14 @@ export default function DeckDetails() {
       setCards(await listCards(deckId, nextFilters));
       setError("");
     } catch (err) {
-      setError(err.message);
+      setError(toRussianError(err, "Не удалось загрузить карточки."));
     } finally {
       setLoading(false);
     }
   }
 
   useEffect(() => {
-    loadDeck().catch((err) => setError(err.message));
+    loadDeck().catch((err) => setError(toRussianError(err, "Не удалось загрузить колоду.")));
     loadCards();
   }, [deckId]);
 
@@ -74,7 +75,7 @@ export default function DeckDetails() {
       setMessage("Карточка сохранена.");
       await loadCards();
     } catch (err) {
-      setMessage(err.message);
+      setMessage(toRussianError(err, "Не удалось сохранить карточку."));
     }
   }
 
@@ -98,16 +99,16 @@ export default function DeckDetails() {
     setFilters(next);
   }
 
-  if (!deck && !error) return <Layout title="Deck Notebook"><LoadingState>Загружаю колоду...</LoadingState></Layout>;
+  if (!deck && !error) return <Layout title="Блокнот колоды"><LoadingState>Загружаю колоду...</LoadingState></Layout>;
 
   return (
-    <Layout title="Deck Notebook" activeTitle="decks">
+    <Layout title="Блокнот колоды" activeTitle="Колоды">
       {error && <div className="message danger">{error}</div>}
       {deck && (
         <>
           <div className="deck-hero">
             <div>
-              <div className="eyebrow">{canEdit ? "Editable notebook" : "Public preview"}</div>
+              <div className="eyebrow">{canEdit ? "Можно редактировать" : "Публичный просмотр"}</div>
               <h1 className="page-title">{deck.name}</h1>
               <p className="page-copy">{deck.description || "Без описания"}</p>
             </div>
@@ -115,14 +116,14 @@ export default function DeckDetails() {
               {canEdit && <Button as={Link} to={`/training/${deck.id}`}>Тренировать</Button>}
               <Button type="button" onClick={() => exportCardsCsv(cards, deck.name)}>Экспорт CSV</Button>
               {canEdit && <label className="win-button">Импорт CSV<input type="file" accept=".csv,text/csv" className="hidden" onChange={handleImport} /></label>}
-              {canEdit && <Button type="button" onClick={() => setAiOpen(true)}>AI генерация</Button>}
+              {canEdit && <Button type="button" onClick={() => setAiOpen(true)}>ИИ-генерация</Button>}
             </div>
           </div>
           <div className="split">
             {canEdit ? (
               <div className="panel">
-                <div className="eyebrow">New card</div>
-                <h2>Add a study slip</h2>
+                <div className="eyebrow">{formCard.id ? "Редактирование" : "Новая карточка"}</div>
+                <h2>{formCard.id ? "Обновить карточку" : "Добавить учебную карточку"}</h2>
                 <form onSubmit={handleCardSubmit}>
                   <label>Лицевая сторона<textarea required value={formCard.front} onChange={(event) => setFormCard({ ...formCard, front: event.target.value })}></textarea></label>
                   <label>Обратная сторона<textarea required value={formCard.back} onChange={(event) => setFormCard({ ...formCard, back: event.target.value })}></textarea></label>
@@ -136,7 +137,7 @@ export default function DeckDetails() {
                 <div className={`message ${message ? "success" : "hidden"}`}>{message}</div>
               </div>
             ) : (
-              <div className="panel"><div className="eyebrow">Read only</div><h2>Public preview</h2><p className="muted">Чтобы редактировать, скопируйте колоду себе из каталога.</p></div>
+              <div className="panel"><div className="eyebrow">Только просмотр</div><h2>Публичная колода</h2><p className="muted">Чтобы редактировать, скопируйте колоду себе из каталога.</p></div>
             )}
             <div>
               <div className="toolbar">
@@ -147,12 +148,12 @@ export default function DeckDetails() {
               {loading ? <LoadingState>Загружаю карточки...</LoadingState> : (
                 <ul className="list card-list system-list">
                   {cards.length ? cards.map((card) => <Flashcard key={card.id} card={card} canEdit={canEdit} onEdit={setFormCard} onDelete={handleDelete} />)
-                    : <li><EmptyState eyebrow="No cards" title="Карточек пока нет">Добавьте первую карточку или импортируйте CSV, чтобы собрать тренировочный набор.</EmptyState></li>}
+                    : <li><EmptyState eyebrow="Нет карточек" title="Карточек пока нет">Добавьте первую карточку или импортируйте CSV, чтобы собрать тренировочный набор.</EmptyState></li>}
                 </ul>
               )}
             </div>
           </div>
-          <div className="status-bar"><span>{canEdit ? "Editable" : "Read only"}</span><span>{cards.length} cards</span></div>
+          <div className="status-bar"><span>{canEdit ? "Редактирование доступно" : "Только просмотр"}</span><span>Карточки: {cards.length}</span></div>
           {aiOpen && <AiModal deckId={deckId} onClose={() => setAiOpen(false)} onSaved={loadCards} />}
         </>
       )}
@@ -179,7 +180,7 @@ function AiModal({ deckId, onClose, onSaved }) {
       setMessage("Выберите карточки для сохранения.");
     } catch (err) {
       setKind("danger");
-      setMessage(`ИИ не смог сгенерировать карточки: ${err.message}`);
+      setMessage(`ИИ не смог подготовить карточки. ${toRussianError(err, "Попробуйте другой текст или повторите позже.")}`);
     }
   }
 
@@ -205,8 +206,8 @@ function AiModal({ deckId, onClose, onSaved }) {
   }
 
   return (
-    <Modal title="AI study notes" icon="A" onClose={onClose}>
-      <div className="menu-bar"><span className="menu-item">Source text</span><span className="menu-item">Generate</span><span className="menu-item">Review</span></div>
+    <Modal title="ИИ-подготовка карточек" icon="И" onClose={onClose}>
+      <div className="menu-bar"><span className="menu-item">Исходный текст</span><span className="menu-item">Генерация</span><span className="menu-item">Проверка</span></div>
       <form onSubmit={handleGenerate}>
         <label>Текст для карточек<textarea className="notepad" name="text" required></textarea></label>
         <label>Количество<select name="amount" defaultValue="5"><option>5</option><option>10</option><option>20</option></select></label>

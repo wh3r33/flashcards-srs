@@ -1,26 +1,21 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import Navigation from "./Navigation";
 
 const titleIcons = {
-  "Second Brain Studio": "S",
-  "My Knowledge Journal": "M",
-  "Notebook Library": "N",
-  "Deck Notebook": "D",
-  "Recall Studio": "R",
-  "Shared Archive": "A",
-  "Study Workspace": "U",
-  "Login.exe": "L",
-  "Register.exe": "R"
+  "Картотека памяти": "К",
+  "Журнал памяти": "Ж",
+  "Библиотека колод": "Б",
+  "Блокнот колоды": "К",
+  "Тренировка": "Т",
+  "Публичный каталог": "П",
+  "Профиль обучения": "П",
+  "Вход": "В",
+  "Регистрация": "Р"
 };
 
 export function Window({ title, children, extra = "" }) {
   return (
-    <section className={`window ${extra}`.trim()}>
-      <div className="title-bar">
-        <span className="title-left"><span className="program-icon">{titleIcons[title] || "S"}</span><span>{title}</span></span>
-        <span className="window-controls" aria-hidden="true"><b></b><b></b><b></b></span>
-      </div>
+    <section className={`workspace-panel ${extra}`.trim()} aria-label={title}>
       <div className="window-body">{children}</div>
     </section>
   );
@@ -43,19 +38,20 @@ export default function Layout({ title, activeTitle, children, simple = false })
   }
 
   if (simple) {
-    return <main className="desktop single-window">{children}</main>;
+    return <main className="desktop public-canvas">{children}</main>;
   }
 
   return (
     <main className="desktop">
-      <div className="shell">
+      <div className="app-shell">
         <Navigation title={title} onThemeToggle={toggleTheme} />
-        <Window title={title}>{children}</Window>
-      </div>
-      <div className="start-bar">
-        <Link className="win-button" to="/dashboard">Journal</Link>
-        <div className="task-buttons"><div className="win-button task-button is-active">{activeTitle || title}</div></div>
-        <div className="clock">{clock}</div>
+        <section className="workspace" aria-label={title}>
+          <div className="workspace-topline">
+            <span>{activeTitle || title}</span>
+            <span>{clock}</span>
+          </div>
+          <Window title={title}>{children}</Window>
+        </section>
       </div>
     </main>
   );

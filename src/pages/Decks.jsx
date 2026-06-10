@@ -6,6 +6,7 @@ import EmptyState from "../components/EmptyState";
 import LoadingState from "../components/LoadingState";
 import { useAuth } from "../App";
 import { createDeck, deleteDeck, getDeck, listDecks, updateDeck } from "../services/deckService";
+import { toRussianError } from "../utils/errors";
 
 const emptyDeck = { id: "", name: "", description: "", is_public: false };
 
@@ -24,7 +25,7 @@ export default function Decks() {
       setDecks(await listDecks(nextSearch.trim()));
       setError("");
     } catch (err) {
-      setError(err.message);
+      setError(toRussianError(err, "Не удалось загрузить колоды."));
     } finally {
       setLoading(false);
     }
@@ -45,7 +46,7 @@ export default function Decks() {
       setMessage("Готово.");
       await load();
     } catch (err) {
-      setMessage(err.message);
+      setMessage(toRussianError(err, "Не удалось сохранить колоду."));
     }
   }
 
@@ -65,19 +66,19 @@ export default function Decks() {
   }
 
   return (
-    <Layout title="Notebook Library" activeTitle="decks">
+    <Layout title="Библиотека колод" activeTitle="Колоды">
       <div className="deck-hero">
         <div>
-          <div className="eyebrow">Personal archive</div>
-          <h1 className="page-title">Decks should feel worth opening.</h1>
-          <p className="page-copy">Каждая колода оформлена как отдельный учебный блокнот: с ярлыком, закладкой и собственной ролью в системе знаний.</p>
+          <div className="eyebrow">Личный архив</div>
+          <h1 className="page-title">Колоды должны быть понятны с первого взгляда.</h1>
+          <p className="page-copy">Создавайте отдельные блокноты для тем, курсов и проектов. Каждая колода становится набором для повторения.</p>
         </div>
       </div>
       <div className="explorer-layout">
         <div className="panel tree-panel">
-          <div className="eyebrow">{formDeck.id ? "Edit notebook" : "New notebook"}</div>
-          <h2>{formDeck.id ? formDeck.name : "Start a collection"}</h2>
-          <p className="muted">Назовите тему так, будто ставите новый блокнот на полку личной библиотеки.</p>
+          <div className="eyebrow">{formDeck.id ? "Редактирование" : "Новая колода"}</div>
+          <h2>{formDeck.id ? formDeck.name : "Начать коллекцию"}</h2>
+          <p className="muted">Дайте колоде ясное название и коротко опишите, для чего она нужна.</p>
           <hr />
           <form onSubmit={handleSubmit}>
             <label>Название<input required value={formDeck.name} onChange={(event) => setFormDeck({ ...formDeck, name: event.target.value })} /></label>
@@ -94,12 +95,12 @@ export default function Decks() {
             <ul className="list folder-list">
               {decks.length ? decks.map((deck) => (
                 <DeckCard key={deck.id} deck={deck} to={`/decks/${deck.id}`} onEdit={handleEdit} onDelete={handleDelete} />
-              )) : <li><EmptyState eyebrow="Empty library" title="Коллекций пока нет">Создайте первую колоду слева и превратите заметки в систему повторения.</EmptyState></li>}
+              )) : <li><EmptyState eyebrow="Пустая библиотека" title="Коллекций пока нет">Создайте первую колоду слева и превратите заметки в систему повторения.</EmptyState></li>}
             </ul>
           )}
         </div>
       </div>
-      <div className="status-bar"><span>{user.email}</span><span>{decks.length} collections</span></div>
+      <div className="status-bar"><span>{user.email}</span><span>Колоды: {decks.length}</span></div>
     </Layout>
   );
 }

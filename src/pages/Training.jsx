@@ -7,6 +7,7 @@ import { dueCards } from "../services/cardService";
 import { explainCard } from "../services/aiService";
 import { reviewCard } from "../services/reviewService";
 import { RATINGS } from "../utils/srs";
+import { toRussianError } from "../utils/errors";
 
 export default function Training() {
   const { deckId } = useParams();
@@ -21,7 +22,7 @@ export default function Training() {
   useEffect(() => {
     dueCards(deckId === "all" ? null : deckId)
       .then(setCards)
-      .catch((err) => setError(err.message))
+      .catch((err) => setError(toRussianError(err, "Не удалось загрузить карточки для повторения.")))
       .finally(() => setLoading(false));
   }, [deckId]);
 
@@ -49,17 +50,17 @@ export default function Training() {
     try {
       setExplanation(await explainCard(current.front, current.back));
     } catch (err) {
-      setExplanation(`ИИ не смог объяснить тему: ${err.message}`);
+      setExplanation(`ИИ не смог объяснить тему. ${toRussianError(err, "Попробуйте повторить запрос позже.")}`);
     }
   }
 
   return (
-    <Layout title="Recall Studio" activeTitle="training">
+    <Layout title="Тренировка" activeTitle="Тренировка">
       <div className="training-intro">
         <div>
-          <div className="eyebrow">Immersive recall</div>
-          <h1 className="page-title">One beautiful study card at a time.</h1>
-          <p className="page-copy">Вопрос, раскрытие ответа и оценка памяти выстроены как спокойный учебный ритуал без лишних отвлечений.</p>
+          <div className="eyebrow">Интервальное повторение</div>
+          <h1 className="page-title">Одна карточка за раз.</h1>
+          <p className="page-copy">Сначала вспомните ответ, затем откройте карточку и оцените, насколько уверенно вы справились.</p>
         </div>
       </div>
       <div className="training-shell">
@@ -90,7 +91,7 @@ export default function Training() {
           </div>
         )}
       </div>
-      <div className="status-bar"><span>Spaced repetition active</span><span>Designed for recall, not browsing</span></div>
+      <div className="status-bar"><span>Интервальные повторения включены</span><span>Оценка ответа обновит расписание карточки</span></div>
     </Layout>
   );
 }
