@@ -1,6 +1,9 @@
-import { supabase } from "./supabaseClient.js";
+import { isSupabaseConfigured, supabase } from "./supabaseClient.js";
+
+const CONFIG_ERROR_MESSAGE = "Supabase не подключён. Проверьте js/config.js";
 
 export async function getSession() {
+  if (!isSupabaseConfigured()) return null;
   const { data, error } = await supabase.auth.getSession();
   if (error) throw error;
   return data.session;
@@ -21,12 +24,14 @@ export async function redirectIfAuthed() {
 }
 
 export async function register(email, password) {
+  if (!isSupabaseConfigured()) throw new Error(CONFIG_ERROR_MESSAGE);
   const { data, error } = await supabase.auth.signUp({ email, password });
   if (error) throw error;
   return data;
 }
 
 export async function login(email, password) {
+  if (!isSupabaseConfigured()) throw new Error(CONFIG_ERROR_MESSAGE);
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) throw error;
   return data;

@@ -74,5 +74,5 @@ export function formDataObject(form) {
 }
 
 export function requireConfigNotice() {
-  return `<div class="message danger">Подключите Supabase в файле js/config.js, затем примените SQL и Edge Functions из папки supabase.</div>`;
+  return `<div class="message danger">Supabase не подключён. Проверьте js/config.js</div>`;
 }
