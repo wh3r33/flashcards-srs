@@ -17,16 +17,16 @@
 
 Папка для скриншотов: `docs/screenshots/`.
 
-| Экран | Превью |
-| --- | --- |
-| Главная | ![Главная](<img width="1083" height="796" alt="Снимок экрана — 2026-06-11 в 01 28 22" src="https://github.com/user-attachments/assets/1c62e6bc-ad15-4ee2-b42c-a552df83b2de" />)|
-| Регистрация / вход | ![Регистрация / вход](<img width="1153" height="767" alt="Снимок экрана — 2026-06-11 в 01 29 36" src="https://github.com/user-attachments/assets/8c121766-68cb-452a-bbfb-16f3c72e7d05"/>
-) |
-| Колоды | ![Колоды](<img width="1128" height="800" alt="Снимок экрана — 2026-06-11 в 01 30 38" src="https://github.com/user-attachments/assets/9f854d20-0266-4787-a81f-e3ae22e1ca83" />) |
-| Карточки | ![Карточки](<img width="984" height="600" alt="Снимок экрана — 2026-06-11 в 01 31 57" src="https://github.com/user-attachments/assets/a55254ff-6487-47ea-a5eb-dbc5f4c24c31" />) |
-| AI-генерация | ![AI-генерация](<img width="636" height="434" alt="Снимок экрана — 2026-06-11 в 01 32 37" src="https://github.com/user-attachments/assets/c6ba4a2a-b1f5-4ef8-adc7-6fd4840dcc69" />) |
-| Профиль | ![Профиль](<img width="1118" height="798" alt="Снимок экрана — 2026-06-11 в 01 33 13" src="https://github.com/user-attachments/assets/c9ef5128-1c0a-495b-8b42-9e90802fa5f7" />) |
+## 📸 Скриншоты
 
+| Экран | Превью |
+|--------|--------|
+| Главная | <img width="500" src="https://github.com/user-attachments/assets/1c62e6bc-ad15-4ee2-b42c-a552df83b2de"> |
+| Регистрация / вход | <img width="500" src="https://github.com/user-attachments/assets/8c121766-68cb-452a-bbfb-16f3c72e7d05"> |
+| Колоды | <img width="500" src="https://github.com/user-attachments/assets/9f854d20-0266-4787-a81f-e3ae22e1ca83"> |
+| Карточки | <img width="500" src="https://github.com/user-attachments/assets/a55254ff-6487-47ea-a5eb-dbc5f4c24c31"> |
+| AI-генерация | <img width="500" src="https://github.com/user-attachments/assets/c6ba4a2a-b1f5-4ef8-adc7-6fd4840dcc69"> |
+| Профиль | <img width="500" src="https://github.com/user-attachments/assets/c9ef5128-1c0a-495b-8b42-9e90802fa5f7"> |
 
 
 
