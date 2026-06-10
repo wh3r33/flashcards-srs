@@ -1,23 +1,19 @@
-# Python
-.venv/
-__pycache__/
-*.pyc
+cat >> .gitignore <<'EOF'
 
-# Node / Vite
-node_modules/
-dist/
+# local secrets
 .env
 .env.local
-.env.*.local
 
-# IDE
+# editor
 .idea/
 
-# Codex
-.codex/
+# builds/deps
+node_modules/
+dist/
 
-# UI/UX Skill
+# supabase temp
+supabase/.temp/
+
+# downloaded skill repo
 ui-ux-pro-max-skill/
-
-# macOS
-.DS_Store
+EOF

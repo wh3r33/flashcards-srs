@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
-  <rect width="512" height="512" fill="#c0c0c0"/>
-  <rect x="64" y="92" width="384" height="328" fill="#d4d0c8" stroke="#000" stroke-width="10"/>
-  <rect x="74" y="102" width="364" height="58" fill="#000080"/>
-  <rect x="116" y="208" width="280" height="154" fill="#fff" stroke="#808080" stroke-width="10"/>
-  <text x="256" y="310" text-anchor="middle" font-family="Tahoma, Arial" font-size="76" font-weight="700" fill="#000">SRS</text>
-</svg>
