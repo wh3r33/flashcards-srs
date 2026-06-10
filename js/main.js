@@ -37,11 +37,12 @@ function renderLanding() {
   app.innerHTML = `
     <main class="desktop single-window">
       ${windowHtml("StudyOS.exe", `
+        <div class="menu-bar"><span class="menu-item">File</span><span class="menu-item">Programs</span><span class="menu-item">Help</span></div>
         ${authNotice()}
         <div class="hero-layout">
           <div>
-            <h1 class="hero-title">StudyOS.exe</h1>
-            <p class="hero-copy">Ретро-система для карточек, интервальных повторений, публичных колод и генерации учебных карточек через серверную ИИ-функцию.</p>
+            <h1 class="hero-title">STUDY OS 98</h1>
+            <p class="hero-copy">Учебная операционная система для карточек, интервальных повторений, публичных колод и генерации учебных карточек через серверную ИИ-функцию.</p>
             <div class="row">
               <a class="win-button" href="/register.html">Создать аккаунт</a>
               <a class="win-button" href="/login.html">Войти</a>
@@ -53,11 +54,12 @@ function renderLanding() {
             <div class="desktop-icon"><div class="ico"></div>flashcards.exe</div>
             <div class="desktop-icon"><div class="ico"></div>AI_Generator.exe</div>
             <div class="window mini-window">
-              <div class="title-bar"><span>System_Monitor.exe</span><span class="window-controls"><b>_</b><b>□</b><b>×</b></span></div>
+              <div class="title-bar"><span class="title-left"><span class="program-icon">M</span><span>System_Monitor.exe</span></span><span class="window-controls"><b>_</b><b>□</b><b>×</b></span></div>
               <div class="window-body"><div class="chart"><div class="bar" style="height:35px">2</div><div class="bar" style="height:80px">6</div><div class="bar" style="height:55px">4</div><div class="bar" style="height:120px">9</div><div class="bar" style="height:65px">5</div><div class="bar" style="height:95px">7</div><div class="bar" style="height:40px">3</div></div></div>
             </div>
           </div>
         </div>
+        <div class="status-bar"><span>Ready</span><span>Windows 98 learning environment</span></div>
       `, "hero-window")}
     </main>
   `;
@@ -119,6 +121,7 @@ async function renderLogin() {
 async function renderDashboard() {
   await requireAuth();
   app.innerHTML = appShell("System_Monitor.exe", `
+    <div class="menu-bar"><span class="menu-item">File</span><span class="menu-item">View</span><span class="menu-item">Tools</span><span class="menu-item">Help</span></div>
     ${authNotice()}
     <div id="message" class="message">Загружаю статистику...</div>
     <div class="grid five" id="stats"></div>
@@ -137,7 +140,7 @@ async function renderDashboard() {
       ["Точность", `${stats.accuracy}%`],
       ["Выучено", stats.learned],
       ["Всего повторов", stats.totalReviews]
-    ].map(([label, value]) => `<div class="panel">${label}<span class="stat-value">${value}</span></div>`).join("");
+    ].map(([label, value]) => `<div class="panel stat-panel"><div class="stat-head"><span>${label}</span><span class="stat-icon"></span></div><span class="stat-value">${value}</span><div class="meter"></div></div>`).join("");
     renderReviewsChart($("#chart"), stats.recentReviews);
   } catch (error) {
     setMessage($("#message"), error.message, "danger");
@@ -158,21 +161,32 @@ function deckForm(deck = {}) {
 
 async function renderDecks() {
   const session = await requireAuth();
-  app.innerHTML = appShell("Deck_Manager.exe", `
-    <div class="split">
-      <div class="panel">${deckForm()}<div id="formMessage" class="message hidden"></div></div>
+  app.innerHTML = appShell("DeckManager.exe", `
+    <div class="menu-bar"><span class="menu-item">File</span><span class="menu-item">Edit</span><span class="menu-item">View</span><span class="menu-item">Tools</span></div>
+    <div class="explorer-layout">
+      <div class="panel tree-panel">
+        <div class="tree-node"><span class="folder-icon"></span><strong>My Computer</strong></div>
+        <div class="tree-node"><span class="folder-icon"></span>Study Decks</div>
+        <div class="tree-node"><span class="folder-icon"></span>Shared Decks</div>
+        <hr>
+        ${deckForm()}
+        <div id="formMessage" class="message hidden"></div>
+      </div>
       <div>
         <div class="toolbar"><input id="deckSearch" placeholder="Поиск колод"><button class="win-button" id="deckSearchButton">Найти</button></div>
-        <ul class="list" id="deckList"><li class="message">Загружаю колоды...</li></ul>
+        <ul class="list folder-list" id="deckList"><li class="message">Загружаю колоды...</li></ul>
       </div>
     </div>
+    <div class="status-bar"><span>Owner: ${escapeHtml(session.user.email)}</span><span id="deckCountStatus">0 object(s)</span></div>
   `, "decks.html");
   bindShell();
   const load = async () => {
     const decks = await listDecks($("#deckSearch").value.trim());
+    $("#deckCountStatus").textContent = `${decks.length} object(s)`;
     $("#deckList").innerHTML = decks.length ? decks.map((deck) => `
-      <li class="list-item">
-        <header><strong>${escapeHtml(deck.name)}</strong><span class="badge">${deck.is_public ? "Публичная" : "Приватная"}</span></header>
+      <li class="list-item folder-item">
+        <div class="folder-icon"></div>
+        <header><strong>${escapeHtml(deck.name)}</strong><span class="badge">${deck.is_public ? "Shared" : "Local"}</span></header>
         <p>${escapeHtml(deck.description || "Без описания")}</p>
         <div class="row">
           <a class="win-button" href="/deck.html?id=${deck.id}">Открыть</a>
@@ -182,7 +196,7 @@ async function renderDecks() {
       </li>`).join("") : `<li class="message">Колоды не найдены.</li>`;
     $$("[data-edit]").forEach((button) => button.addEventListener("click", async () => {
       const deck = await getDeck(button.dataset.edit);
-      $(".panel").innerHTML = deckForm(deck) + `<div id="formMessage" class="message hidden"></div>`;
+      $(".tree-panel").innerHTML = `<div class="tree-node"><span class="folder-icon"></span><strong>Edit Folder</strong></div><hr>` + deckForm(deck) + `<div id="formMessage" class="message hidden"></div>`;
       bindDeckForm(load, session.user.id);
     }));
     $$("[data-delete]").forEach((button) => button.addEventListener("click", async () => {
@@ -237,28 +251,33 @@ async function renderDeckDetail() {
   const deckId = getParam("id");
   const deck = await getDeck(deckId);
   const canEdit = session && session.user.id === deck.user_id;
-  app.innerHTML = appShell("Deck_Manager.exe", `
+  app.innerHTML = appShell("DeckManager.exe", `
+    <div class="menu-bar"><span class="menu-item">File</span><span class="menu-item">Cards</span><span class="menu-item">Review</span><span class="menu-item">Help</span></div>
     <div class="toolbar">
       ${canEdit ? `<a class="win-button" href="/training.html?deck=${deck.id}">Тренировать</a>` : ""}
       <button class="win-button" id="exportCsv">Экспорт CSV</button>
       ${canEdit ? `<label class="win-button">Импорт CSV<input id="importCsv" type="file" accept=".csv,text/csv" class="hidden"></label>
       <button class="win-button" id="aiOpen">Сгенерировать из текста</button>` : ""}
     </div>
-    <h1>${escapeHtml(deck.name)}</h1>
-    <p>${escapeHtml(deck.description || "Без описания")}</p>
+    <div class="white-panel">
+      <div class="tree-node"><span class="folder-icon"></span><h1>${escapeHtml(deck.name)}</h1></div>
+      <p>${escapeHtml(deck.description || "Без описания")}</p>
+    </div>
     <div class="split">
       ${canEdit ? `<div class="panel">${cardForm()}<div id="cardMessage" class="message hidden"></div></div>` : `<div class="panel">Это публичный просмотр. Чтобы редактировать, скопируйте колоду себе из каталога.</div>`}
       <div>
         <div class="toolbar"><input id="categoryFilter" placeholder="Категория"><input id="tagFilter" placeholder="Тег"><button class="win-button" id="filterButton">Фильтр</button></div>
-        <ul class="list" id="cardList"><li class="message">Загружаю карточки...</li></ul>
+        <ul class="list card-list system-list" id="cardList"><li class="message">Загружаю карточки...</li></ul>
       </div>
     </div>
+    <div class="status-bar"><span>${canEdit ? "Read/write" : "Read only"}</span><span id="cardCountStatus">0 card(s)</span></div>
     <div id="modalRoot"></div>
   `, "decks.html");
   bindShell();
   let currentCards = [];
   const load = async () => {
     currentCards = await listCards(deckId, { category: $("#categoryFilter").value.trim(), tag: $("#tagFilter").value.trim() });
+    $("#cardCountStatus").textContent = `${currentCards.length} card(s)`;
     $("#cardList").innerHTML = currentCards.length ? currentCards.map((card) => `
       <li class="list-item">
         <header><strong>${escapeHtml(card.front)}</strong><span class="badge">${escapeHtml(typeLabel(card.card_type))}</span></header>
@@ -324,15 +343,16 @@ function openAiModal(deckId, load) {
   $("#modalRoot").innerHTML = `
     <div class="modal-backdrop">
       <section class="window modal">
-        <div class="title-bar"><span>AI_Generator.exe</span><span class="window-controls"><b>_</b><b>□</b><b>×</b></span></div>
+        <div class="title-bar"><span class="title-left"><span class="program-icon">A</span><span>AI_Generator.exe</span></span><span class="window-controls"><b>_</b><b>□</b><b>×</b></span></div>
         <div class="window-body">
+          <div class="menu-bar"><span class="menu-item">File</span><span class="menu-item">Generate</span><span class="menu-item">Help</span></div>
           <form id="aiForm">
-            <label>Текст для карточек<textarea name="text" required></textarea></label>
+            <label>Текст для карточек<textarea class="notepad" name="text" required></textarea></label>
             <label>Количество<select name="amount"><option>5</option><option>10</option><option>20</option></select></label>
             <button class="win-button" type="submit">Сгенерировать из текста</button>
           </form>
           <div id="aiMessage" class="message hidden"></div>
-          <form id="aiPreview" class="list"></form>
+          <form id="aiPreview" class="list system-list"></form>
           <div class="row"><button class="win-button" id="saveGenerated" type="button">Сохранить выбранные</button><button class="win-button" id="closeAi" type="button">Закрыть</button></div>
         </div>
       </section>
@@ -375,7 +395,9 @@ function openAiModal(deckId, load) {
 
 async function renderTraining() {
   await requireAuth();
-  app.innerHTML = appShell("flashcards.exe", `
+  app.innerHTML = appShell("Flashcards.exe", `
+    <div class="menu-bar"><span class="menu-item">Session</span><span class="menu-item">Card</span><span class="menu-item">Tutor</span><span class="menu-item">Help</span></div>
+    <div class="training-shell">
     <div id="trainingMessage" class="message">Загружаю карточки к повторению...</div>
     <div class="training-card" id="trainingCard"></div>
     <div class="toolbar">
@@ -388,8 +410,10 @@ async function renderTraining() {
       <button class="win-button" data-rating="normal">Норм</button>
       <button class="win-button" data-rating="easy">Легко</button>
     </div>
-    <div id="explanation" class="white-panel hidden"></div>
+    <div id="explanation" class="help-document hidden"></div>
     <button class="win-button hidden" id="nextAfterExplain">Следующая карточка</button>
+    </div>
+    <div class="status-bar"><span>FLASHCARDS.EXE</span><span>Spaced repetition active</span></div>
   `, "training.html");
   bindShell();
   const cards = await dueCards(getParam("deck"));
@@ -445,7 +469,8 @@ async function renderTraining() {
 
 async function renderProfile() {
   const session = await requireAuth();
-  app.innerHTML = appShell("Profile.exe", `
+  app.innerHTML = appShell("UserProfile.exe", `
+    <div class="menu-bar"><span class="menu-item">User</span><span class="menu-item">Settings</span><span class="menu-item">Help</span></div>
     <div class="white-panel">
       <strong>Почта</strong><br>${escapeHtml(session.user.email)}
     </div>
@@ -458,22 +483,35 @@ async function renderProfile() {
 
 async function renderPublic() {
   const session = await getSession();
-  app.innerHTML = appShell("File_Explorer.exe", `
+  app.innerHTML = appShell("FileExplorer.exe", `
+    <div class="menu-bar"><span class="menu-item">File</span><span class="menu-item">Edit</span><span class="menu-item">View</span><span class="menu-item">Network</span></div>
     ${authNotice()}
-    <div class="toolbar"><input id="publicSearch" placeholder="Поиск публичных колод"><button class="win-button" id="publicSearchButton">Найти</button></div>
-    <ul class="list" id="publicList"><li class="message">Загружаю каталог...</li></ul>
+    <div class="explorer-layout">
+      <div class="panel tree-panel">
+        <div class="tree-node"><span class="folder-icon"></span><strong>Network Neighborhood</strong></div>
+        <div class="tree-node"><span class="folder-icon"></span>Public Decks</div>
+        <div class="tree-node"><span class="folder-icon"></span>Shared Lessons</div>
+      </div>
+      <div>
+        <div class="toolbar"><input id="publicSearch" placeholder="Поиск публичных колод"><button class="win-button" id="publicSearchButton">Найти</button></div>
+        <ul class="list folder-list" id="publicList"><li class="message">Загружаю каталог...</li></ul>
+      </div>
+    </div>
+    <div class="status-bar"><span>${session ? "Copy enabled" : "Login required to copy"}</span><span id="publicCountStatus">0 shared object(s)</span></div>
   `, "public.html");
   bindShell();
   const load = async () => {
     try {
       const decks = await listPublicDecks($("#publicSearch").value.trim());
+      $("#publicCountStatus").textContent = `${decks.length} shared object(s)`;
       $("#publicList").innerHTML = decks.length ? decks.map((deck) => `
-        <li class="list-item">
-          <header><strong>${escapeHtml(deck.name)}</strong><span class="badge">Публичная</span></header>
+        <li class="list-item folder-item">
+          <div class="folder-icon"></div>
+          <header><strong>${escapeHtml(deck.name)}</strong><span class="badge">Shared</span></header>
           <p>${escapeHtml(deck.description || "Без описания")}</p>
           <div class="row">
             <a class="win-button" href="/deck.html?id=${deck.id}">Просмотр</a>
-            <button class="win-button" data-copy="${deck.id}" ${session ? "" : "disabled"}>Копировать себе</button>
+            <button class="win-button" data-copy="${deck.id}" ${session ? "" : "disabled"}>Copy File</button>
           </div>
         </li>`).join("") : `<li class="message">Публичные колоды не найдены.</li>`;
       $$("[data-copy]").forEach((button) => button.addEventListener("click", async () => {

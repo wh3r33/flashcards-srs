@@ -1,0 +1,16 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# IDE
+.idea/
+
+# Codex
+.codex/
+
+# UI/UX Skill
+ui-ux-pro-max-skill/
+
+# macOS
+.DS_Store
