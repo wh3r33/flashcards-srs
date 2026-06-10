@@ -1,35 +1,15 @@
-const CACHE_NAME = "studyos-v3";
-const ASSETS = [
+const CACHE_NAME = "studyos-react-v1";
+const APP_SHELL = [
   "/",
   "/index.html",
-  "/login.html",
-  "/register.html",
-  "/dashboard.html",
-  "/decks.html",
-  "/deck.html",
-  "/training.html",
-  "/profile.html",
-  "/public.html",
   "/offline.html",
-  "/css/styles.css",
-  "/js/main.js",
-  "/js/utils.js",
-  "/js/layout.js",
-  "/js/auth.js",
-  "/js/decks.js",
-  "/js/cards.js",
-  "/js/reviews.js",
-  "/js/srs.js",
-  "/js/ai.js",
-  "/js/csv.js",
-  "/js/charts.js",
   "/manifest.json",
   "/assets/icons/icon-192.svg",
   "/assets/icons/icon-512.svg"
 ];
 
 self.addEventListener("install", (event) => {
-  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)));
+  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)));
   self.skipWaiting();
 });
 
@@ -44,9 +24,16 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
   const url = new URL(event.request.url);
-  const isLocalScript = url.origin === self.location.origin && url.pathname.startsWith("/js/");
+  const isLocalBuildAsset = url.origin === self.location.origin && url.pathname.startsWith("/assets/");
+  const isScriptOrStyle = event.request.destination === "script" || event.request.destination === "style";
+  const isConfigLike = /config|env/i.test(url.pathname);
 
-  if (isLocalScript) {
+  if (isConfigLike) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
+  if (isScriptOrStyle || isLocalBuildAsset) {
     event.respondWith(
       fetch(event.request)
         .then((response) => {
@@ -59,10 +46,20 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put("/", copy));
+          return response;
+        })
+        .catch(() => caches.match("/") || caches.match("/offline.html"))
+    );
+    return;
+  }
+
   event.respondWith(
-    caches.match(event.request).then((cached) => cached || fetch(event.request).catch(() => {
-      if (event.request.mode === "navigate") return caches.match("/offline.html");
-      return cached;
-    }))
+    caches.match(event.request).then((cached) => cached || fetch(event.request).catch(() => cached))
   );
 });

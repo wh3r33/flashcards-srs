@@ -3,6 +3,13 @@
 __pycache__/
 *.pyc
 
+# Node / Vite
+node_modules/
+dist/
+.env
+.env.local
+.env.*.local
+
 # IDE
 .idea/
 

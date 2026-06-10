@@ -14,8 +14,25 @@ export function renderReviewsChart(container, reviews) {
     if (day) day.count += 1;
   }
   const max = Math.max(1, ...days.map((day) => day.count));
-  container.innerHTML = days.map((day) => {
-    const height = Math.max(8, Math.round((day.count / max) * 120));
-    return `<div class="bar" style="height:${height}px" title="${day.label}: ${day.count}">${day.count}<br>${day.label}</div>`;
-  }).join("");
+  const total = days.reduce((sum, day) => sum + day.count, 0);
+  const average = Math.round((total / days.length) * 10) / 10;
+  container.innerHTML = `
+    <div class="chart-summary">
+      <span>7-day total</span>
+      <strong>${total}</strong>
+      <small>${average} / day</small>
+    </div>
+    <div class="chart-bars" role="list" aria-label="Повторы за последние семь дней">
+      ${days.map((day) => {
+        const height = Math.max(14, Math.round((day.count / max) * 128));
+        return `
+          <div class="chart-day" role="listitem" title="${day.label}: ${day.count}">
+            <span class="bar-value">${day.count}</span>
+            <span class="bar" style="height:${height}px" aria-hidden="true"></span>
+            <span class="bar-label">${day.label}</span>
+          </div>
+        `;
+      }).join("")}
+    </div>
+  `;
 }

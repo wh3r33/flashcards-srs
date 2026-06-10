@@ -1,11 +1,11 @@
 {
   "name": "StudyOS.exe",
   "short_name": "StudyOS",
-  "description": "Карточки и интервальные повторения в стиле Windows 98.",
-  "start_url": "/dashboard.html",
+  "description": "Карточки и интервальные повторения в стиле учебного журнала.",
+  "start_url": "/dashboard",
   "display": "standalone",
-  "background_color": "#c0c0c0",
-  "theme_color": "#000080",
+  "background_color": "#f8f1df",
+  "theme_color": "#15130f",
   "icons": [
     {
       "src": "/assets/icons/icon-192.svg",

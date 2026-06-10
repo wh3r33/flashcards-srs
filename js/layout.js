@@ -1,11 +1,11 @@
 import { logout } from "./auth.js";
 
 const navItems = [
-  ["dashboard.html", "StudyOS.exe"],
-  ["decks.html", "DeckManager.exe"],
-  ["training.html", "Flashcards.exe"],
-  ["public.html", "FileExplorer.exe"],
-  ["profile.html", "UserProfile.exe"]
+  ["dashboard.html", "Journal"],
+  ["decks.html", "Notebooks"],
+  ["training.html", "Recall"],
+  ["public.html", "Archive"],
+  ["profile.html", "Desk"]
 ];
 
 const titleIcons = {
@@ -31,7 +31,7 @@ export function windowHtml(title, body, extra = "") {
     <section class="window ${extra}">
       <div class="title-bar">
         <span class="title-left"><span class="program-icon">${icon}</span><span>${title}</span></span>
-        <span class="window-controls"><b>_</b><b>□</b><b>×</b></span>
+        <span class="window-controls" aria-hidden="true"><b></b><b></b><b></b></span>
       </div>
       <div class="window-body">${body}</div>
     </section>
@@ -46,19 +46,19 @@ export function appShell(title, body, active) {
   return `
     <main class="desktop">
       <div class="shell">
-        ${windowHtml("Start_Menu.exe", `
-          <div class="start-brand"><span class="start-logo"></span><span>STUDY OS 98</span></div>
+        ${windowHtml("Library Index", `
+          <div class="start-brand"><span class="start-logo"></span><span>Second Brain Studio</span></div>
           <nav class="nav">
-            <a class="win-button" href="/dashboard.html">Пуск StudyOS</a>
+            <a class="win-button" href="/dashboard.html">Home base</a>
             ${nav}
-            <button id="themeToggle" type="button">Display.cpl</button>
-            <button id="logoutButton" type="button">Logoff.exe</button>
+            <button id="themeToggle" type="button">Switch light</button>
+            <button id="logoutButton" type="button">Sign out</button>
           </nav>
         `, "nav-window")}
         ${windowHtml(title, body)}
       </div>
       <div class="start-bar">
-        <a class="win-button" href="/dashboard.html">Пуск</a>
+        <a class="win-button" href="/dashboard.html">Journal</a>
         <div class="task-buttons"><div class="win-button task-button is-active">${title}</div></div>
         <div class="clock" id="clock"></div>
       </div>
