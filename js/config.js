@@ -1,0 +1,2 @@
+export const SUPABASE_URL = "https://kricshoaucswsseyiars.supabase.co";
+export const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtyaWNzaG9hdWNzd3NzZXlpYXJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwOTM0NDAsImV4cCI6MjA5NjY2OTQ0MH0.2rHZG7pM0INF54uvR3QqTA8M-5WwFPTfCuFO0MXzdZ0";
