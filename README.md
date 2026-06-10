@@ -14,7 +14,7 @@ https://flashcards-srs-beta.vercel.app/
 
 ## Live Demo
 
-[Демо](PASTE_VERCEL_URL_HERE)
+[Демо](https://flashcards-srs-beta.vercel.app/)
 
 ## Скриншоты
 
