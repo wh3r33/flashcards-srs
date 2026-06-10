@@ -172,7 +172,7 @@ function AiModal({ deckId, onClose, onSaved }) {
     setKind("");
     setMessage("Генерирую карточки...");
     try {
-      const cards = await generateCardsFromText(form.get("text"), Number(form.get("amount")), deckId);
+      const cards = await generateCardsFromText(form.get("text"), Number(form.get("amount")));
       setGenerated(cards);
       setPicked(cards.map((_, index) => index));
       setKind("success");

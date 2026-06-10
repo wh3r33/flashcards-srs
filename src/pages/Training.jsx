@@ -74,6 +74,7 @@ export default function Training() {
                 <div className="toolbar training-actions">
                   {!showingAnswer && <Button type="button" onClick={() => setShowingAnswer(true)}>Показать ответ</Button>}
                   {showExplain && <Button type="button" onClick={handleExplain}>Объяснить тему</Button>}
+                  {showExplain && <Button type="button" onClick={nextCard}>Следующая карточка</Button>}
                 </div>
                 {showingAnswer && (
                   <div className="rating-grid">
@@ -84,7 +85,6 @@ export default function Training() {
                   </div>
                 )}
                 {explanation && <div className="help-document">{explanation}</div>}
-                {explanation && <Button type="button" onClick={nextCard}>Следующая карточка</Button>}
               </>
             )}
           </div>
