@@ -1,0 +1,6 @@
+@media (max-width: 760px) {
+  .modal-backdrop {
+    align-items: start;
+    padding: 10px;
+  }
+}

@@ -1,0 +1,64 @@
+.hidden {
+  display: none !important;
+}
+
+.message:empty {
+  display: none;
+}
+
+.list-item button,
+.list-item a,
+.deck-card,
+.flashcard {
+  cursor: pointer;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(21, 19, 15, .48);
+}
+
+.modal {
+  width: min(760px, 100%);
+  max-height: min(86vh, 860px);
+  overflow: auto;
+}
+
+.preview-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: start;
+}
+
+.chart-summary {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 14px;
+}
+
+.chart-bars {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  align-items: end;
+  gap: 10px;
+  min-height: 168px;
+}
+
+.chart-day {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+}
+
+.bar-value,
+.bar-label {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
