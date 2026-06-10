@@ -5,6 +5,9 @@
 ![Supabase](https://img.shields.io/badge/Supabase-Auth%20%2B%20PostgreSQL%20%2B%20Edge%20Functions-3ecf8e?logo=supabase&logoColor=fff)
 ![PWA](https://img.shields.io/badge/PWA-ready-111827)
 
+## Deploy 
+https://flashcards-srs-beta.vercel.app/
+
 **StudyOS Flashcards SRS** - приложение для учебных карточек с AI-генерацией и интервальными повторениями.
 
 Проект состоит из **React/Vite frontend**, **Supabase backend**, **Supabase Auth**, **PostgreSQL**, **Supabase Edge Functions** и интеграции с **DeepSeek**. Пользователь создает личные колоды, добавляет карточки вручную или через AI, тренируется по расписанию SRS и видит статистику повторений.
